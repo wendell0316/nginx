@@ -23,28 +23,12 @@ server {
   listen 80 default_server;
   server_name sharplook.eoitek.net newlook.eoitek.net;
   charset utf-8;
-  return 301 https://$host$request_uri;
-}
-```
-
-> 表示监听http://sharplook.eoitek.net或http://newlook.eoitek.net的默认80端口，将永久重定向到对应的https
-
-```
-server {
-  listen 443 ssl http2 spdy fastopen=5 reuseport;
-  server_name sharplook.eoitek.net newlook.eoitek.net;
-  charset utf-8;
-
   root /opt/newlook;
-  ssl_certificate /etc/nginx/ssl/sharplook.eoitek.net.cert.pem;
-  ssl_certificate_key /etc/nginx/ssl/sharplook.eoitek.net.key.pem;
-  ssl_trusted_certificate /etc/nginx/ssl/sharplook.eoitek.net.ca.pem;
-
-
 }
 ```
 
-> 监听http://sharplook.eoitek.net或https://newlook.eoitek.net的默认443端口，且设置ssl证书。
+
+> 监听`server_name`的默认80端口。
 >
 > > root  表示所有请求的根目录
 
@@ -63,7 +47,7 @@ server {
 
 * 先查找是否有=开头的精确匹配，如：location = /test/abc/user.do { … }
 
-* 再查找普通匹配，以 最大前缀 为原则，如有以下两个location，则会匹配后一项
+* 再查找普通匹配，以 _**最大前缀**_ 为原则，如有以下两个location，则会匹配后一项
 
 ```
    location /test/ { … }
@@ -94,7 +78,7 @@ server {
 
 > 该`location`会匹配所有以‘/’为前缀的请求，前提是在之前定义的有较大前缀的location中匹配不成功。
 >
-> > `try\_files`指令表示尝试寻找请求的目录，如果后面的三个参数都未完成匹配，则返回404页面
+> > `try_files`指令表示尝试寻找请求的目录，如果后面的三个参数都未完成匹配，则返回404页面
 > >
 > > `expires`指令表示匹配到的文件在浏览器的缓存时间，-1表示不缓存
 
