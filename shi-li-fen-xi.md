@@ -98,6 +98,7 @@ server {
 > >
 > > `expires`指令表示匹配到的文件在浏览器的缓存时间，-1表示不缓存
 
+
 ```
   location ^~ /api/itoa {
     rewrite '^/api(.*)' $1;
@@ -114,7 +115,13 @@ server {
 
 > 在`rewrite`指令集中，若没有 `last`\(停止处理当前的ngx\_http\_rewrite\_module的指令集，并开始搜索与更改后的uri相匹配的location\)、`break`\(停止处理当前的ngx\_http\_rewrite\_module的指令集\)、`redirect`\(返回302临时重定向\)、或`permanent`\(返回301永久重定向\)
 >
-> > 该`location`块旨在将   /api/\***  改为   /**\*\*\* （真实后台接口无api路径）。然后以修改后的uri去请求接口。
+> > `proxy_pass` 将带着当前的`$uri`去请求接口
+> >
+> > 该`location`块旨在将`/api/***`改为`/***` （真实后台接口无api路径）。然后以修改后的uri去请求接口。
+
+
+
+
 
 
 
