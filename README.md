@@ -1,3 +1,4 @@
-# My Awesome Book
+# nginx配置简述
 
-This file file serves as your book's preface, a great place to describe your book's content and ideas.
+&gt;Nginx是一个异步框架的Web服务器，也可以用作反向代理，负载平衡器 和 HTTP缓存。
+
