@@ -22,7 +22,7 @@ nginx 是由一些模块组成，我们一般在配置文件中使用一些具�
 root /data/www
 ```
 
-而块级指令和简单指令有着一样的结构，但是末尾不是分号而是用**{** 和 **}**大括号包裹的额外指令集如果一个块级指令的大括号里有其他指令，则它被叫做一个上下文（比如：[events](http://nginx.org/en/docs/ngx_core_module.html#events)，[http](http://nginx.org/en/docs/http/ngx_http_core_module.html#httph)，[server](http://nginx.org/en/docs/http/ngx_http_core_module.html#servers)，和[location](http://nginx.org/en/docs/http/ngx_http_core_module.html#location)）。`events`和`http`的指令是放在主上下文中，`server`放在`http`中,`location`放在`server`中。
+而块级指令和简单指令有着一样的结构，但是末尾不是分号而是用`{` 和 `}`大括号包裹的额外指令集如果一个块级指令的大括号里有其他指令，则它被叫做一个上下文（比如：[events](http://nginx.org/en/docs/ngx_core_module.html#events)，[http](http://nginx.org/en/docs/http/ngx_http_core_module.html#httph)，[server](http://nginx.org/en/docs/http/ngx_http_core_module.html#servers)，和[location](http://nginx.org/en/docs/http/ngx_http_core_module.html#location)）。`events`和`http`的指令是放在主上下文中，`server`放在`http`中,`location`放在`server`中。
 
 ```
 http {

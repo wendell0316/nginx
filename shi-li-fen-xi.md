@@ -44,7 +44,7 @@ server {
 }
 ```
 
-> 监听[https://sharplook.eoitek.net或https://newlook.eoitek.net的默认443端口，且设置ssl证书。](https://sharplook.eoitek.net或https://newlook.eoitek.net的默认443端口，且设置ssl证书。)
+> 监听http://sharplook.eoitek.net或https://newlook.eoitek.net的默认443端口，且设置ssl证书。
 >
 > > root  表示所有请求的根目录
 
