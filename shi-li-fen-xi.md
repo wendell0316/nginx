@@ -27,7 +27,7 @@ server {
 }
 ```
 
-> 表示监听 [http://sharplook.eoitek.net或http://newlook.eoitek.net的默认80端口，将永久重定向到对应的https](http://sharplook.eoitek.net或http://newlook.eoitek.net的默认80端口，将永久重定向到对应的https)
+> 表示监听 http://sharplook.eoitek.net或http://newlook.eoitek.net的默认80端口，将永久重定向到对应的https
 
 ```
 server {
