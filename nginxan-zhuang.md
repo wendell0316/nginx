@@ -16,8 +16,23 @@ nginx -V
 
 ### 使用brew启动、停止、重启nginx
 
+* 启动
+
 ```
 brew services start nginx 
+```
+
+* 停止
+
+```
+brew services stop nginx
+```
+
+* 重启
+
+```
+brew services restart nginx
+```
 
 #### 配置文件结构
 

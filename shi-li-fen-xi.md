@@ -16,6 +16,8 @@ upstream itoa_server {
 
 > 请求将被上面三个服务依次响应
 
+
+
 * #### server
 
 ```
@@ -41,15 +43,15 @@ server {
 
 在`server`模块中可以定义多个`location`指令来匹配不同的url请求，多个不同location配置的URI匹配模式，总体的匹配原则是：
 
-**先匹配普通字符串模式，再匹配正则模式**。只识别URI部份，例如请求为：/test/abc/user.do?name=xxxx
+_**先匹配普通字符串模式，再匹配正则模式**。只识别URI部份，例如请求为：/test/abc/user.do?name=xxxx
 
 一个请求过来后，Nginx匹配这个请求的流程如下：
 
-* 先查找是否有=开头的精确匹配，如：location = /test/abc/user.do { … }
+1. 先查找是否有=开头的精确匹配，如：location = /test/abc/user.do { … }
 
-* 再查找普通匹配，以 _**最大前缀**_ 为原则，如有以下两个location，则会匹配后一项
+2. 再查找普通匹配，以 _**最大前缀**_ 为原则，如有以下两个location，则会匹配   后一项
 
-```
+ ```
    location /test/ { … }
 
    location /test/abc { … }
