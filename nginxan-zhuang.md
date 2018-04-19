@@ -1,9 +1,7 @@
-> ##### 如果你想要在本地玩nginx，首先需要安装。
-
-#### 使用brew安装
+#### 在linux服务器安装
 
 ```
-brew install nginx
+rpm -ivh nginx-1.12.1-1.el7.ngx.x86_64.rpm
 ```
 
 #### 查看配置文件位置
@@ -12,14 +10,23 @@ brew install nginx
 nginx -V
 ```
 
-> 我们需要找到nginx.conf这个配置文件的位置
+#### 修改nginx.conf
 
-### 使用brew启动、停止、重启nginx
+这个配置文件的位置，一般情况下位于/etc/nginx/nginx.conf，可使用nginx -V查看
+
+使用vim打开后，将user和worker\_processes进行如下修改
+
+```
+user root
+worker_processes auto
+```
+
+#### 使用brew启动、停止、重启nginx
 
 * 启动
 
 ```
-brew services start nginx 
+brew services start nginx
 ```
 
 * 停止
