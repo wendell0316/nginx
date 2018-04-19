@@ -21,27 +21,29 @@ user root
 worker_processes auto
 ```
 
-#### 使用brew启动、停止、重启nginx
+#### nginx启动、停止、重启
 
 * 启动
 
 ```
-brew services start nginx
+service start nginx
 ```
 
 * 停止
 
 ```
-brew services stop nginx
+service stop nginx
 ```
 
 * 重启
 
 ```
-brew services restart nginx
+service restart nginx
 ```
 
 #### 配置文件结构
+
+> 在修改nginx.conf文件后，我们需要进入conf文件夹下（一般位于/etc/nginx/conf.d/），寻找或新建\*.conf文件
 
 nginx 是由一些模块组成，我们一般在配置文件中使用一些具体的指令来控制它们。指令被分为简单指令和块级命令。一个简单的指令是由名字和参数组成，中间用空格分开，并以分号结尾。比如：
 
