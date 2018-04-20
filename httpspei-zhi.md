@@ -1,132 +1,65 @@
-安装 rpm
+* #### Keepalived 介绍
 
-rpm -ivh
+  Keepalived是一个基于VRRP协议来实现的服务高可用方案，可以利用其来避免IP单点故障。
 
-user root;
+  > 文本将介绍其与nginx的结合使用，来达到高可用。
+  >
+  > > 在两台或多台服务器中配置相同的nginx配置。
 
-worker\_processes    auto
+* #### Keepalived 安装
+ * 查看服务器是否已安装keepalived
+ ```
+ which keepalived
+ ```
+ * 未安装可通过以下指令安装
+ ```
+  yum install keepalived
+  ```
 
-location ^~ /api/spl {
-
-```
-rewrite '^/api/spl\(.\*\)' $1;
-
-expires off;
-
-proxy\_pass http://spl\_server;
-
-proxy\_set\_header Host              $host;
-
-proxy\_set\_header X-Real-IP         $remote\_addr;
-
-proxy\_set\_header X-Forwarded-For   $proxy\_add\_x\_forwarded\_for;
-
-proxy\_set\_header X-Forwarded-Host  $host:$server\_port;
-
-proxy\_set\_header X-Forwarded-Proto $scheme;
-
-break;
-```
-
-}
-
-location ^~ /api/logtrace {
+* #### 配置文件模板
 
 ```
-rewrite "^/api\(.\*\)" $1;
+  ! Configuration File for keepalived
 
-expires off;
+    global_defs {
+       router_id nginx_master           # 标志本节点的名称，可以将两台服务器区分开
+    }
 
-proxy\_pass http://bigdata\_server;
+    vrrp_script chk_nginx {             # 定义检查nginx的脚本
+        script "curl --HEAD localhost"  # 查询nginx代理的服务是否还在启动
+        interval 2                      # 每2秒检查一次
+        weight -20                      # 失败一次优先级减少20
+    }
 
-proxy\_set\_header Host              $host;
+    vrrp_instance VI_1 {
+        state MASTER                    # 状态，主节点为master，备份节点为BACKUP
+        interface eth0                  # 绑定VIP的网络接口，通过ifconfig查看自己的网络接口
+        virtual_router_id 51            # 虚拟路由的ID号,两个节点设置必须一样
+        mcast_src_ip 145.4.232.211      # 本机ip地址
+        priority 100                    # 节点优先级，master比backup高
+        advert_int 1                    # 组播信息发送时间间隔，两个节点必须设置一样，默认为1秒
+        virtual_ipaddress {             # 虚拟IP，两个节点设置必须一样。可以设置多个，一行写一个
+            145.4.232.171
+        }
 
-proxy\_set\_header X-Real-IP         $remote\_addr;
-
-proxy\_set\_header X-Forwarded-For   $proxy\_add\_x\_forwarded\_for;
-
-proxy\_set\_header X-Forwarded-Host  $host:$server\_port;
-
-proxy\_set\_header X-Forwarded-Proto $scheme;
-
-break;
+        track_script {
+            chk_nginx                   #调用上面定义的检查nginx脚本
+        }
+    }
 ```
 
-}
+* #### Keepalived 启动及排错
 
-location ^~ /api/bigdata {
+ * 启动
 
-```
-rewrite "^/api/bigdata\(.\*\)" $1;
+   ```
+  systemctl start keepalived
+  ```
+ * 查看状态
+  ```
+  systemctl status keepalived -l
+  ```
+ * 若出错可根据提示安装（因不同服务器可能出错情况不同，不一一列举），一般是缺少依赖
+ * 修改后再启动即可(若仍无法正常启动可选择卸载重装)
 
-expires off;
-
-proxy\_pass http://bigdata\_server;
-
-proxy\_set\_header Host              $host;
-
-proxy\_set\_header X-Real-IP         $remote\_addr;
-
-proxy\_set\_header X-Forwarded-For   $proxy\_add\_x\_forwarded\_for;
-
-proxy\_set\_header X-Forwarded-Host  $host:$server\_port;
-
-proxy\_set\_header X-Forwarded-Proto $scheme;
-
-break;
-```
-
-}
-
-location ^~ /api/topology {
-
-```
-rewrite "^/api\(.\*\)" $1;
-
-expires off;
-
-proxy\_pass http://topology\_server;
-
-proxy\_set\_header Host              $host;
-
-proxy\_set\_header X-Real-IP         $remote\_addr;
-
-proxy\_set\_header X-Forwarded-For   $proxy\_add\_x\_forwarded\_for;
-
-proxy\_set\_header X-Forwarded-Host  $host:$server\_port;
-
-proxy\_set\_header X-Forwarded-Proto $scheme;
-
-break;
-```
-
-}
-
-  location ~\* \.\(otf\|eot\|woff\|ttf\|woff2\)$ {
-
-    types     {font/opentype otf;}
-
-    types     {application/vnd.ms-fontobject eot;}
-
-    types     {font/truetype ttf;}
-
-    types     {application/font-woff woff;}
-
-    types     {font/woff2 woff2;}
-
-  }
-
-
-
-  location ~\* \.\(?:jpg\|jpeg\|gif\|png\|ico\|cur\|gz\|svg\|svgz\|mp4\|ogg\|ogv\|webm\|htc\|ttf\|woff\|woff2\|css\|js\|map\)$ {
-
-    access\_log off;
-
-    expires max;
-
-    more\_set\_headers "Cache-Control: public, immutable";
-
-    break;
-
-  }
 
